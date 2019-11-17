@@ -21,7 +21,7 @@ class MouseTracker:
         print("     Mouse Tracker    ")
         print("----------------------")
         print("Hit the Esc key to stop recording")
-        self.participant = input("Enter a name for your participant: ")
+        self.participant = input("Enter a name: ")
         print("Recording...")
 
         # Keyboard listener in a non-blocking fashion:
@@ -79,10 +79,11 @@ class MouseTracker:
             movement_writer.writerow(['X','Y'])
             for coordinate in data:
                 movement_writer.writerow(coordinate)
-
+        print("---------------------------------------------------")
         print("Total number of mouse clicks: ", self.num_mouse_clicks)
         print("Total number of keystrokes: ", self.num_keystrokes)
         print("Total number of scrolls: ", self.num_scrolls)
+        print("---------------------------------------------------")
 
 
 def call_repeatedly( interval, func, *args):
@@ -98,7 +99,7 @@ def call_repeatedly( interval, func, *args):
 def main():
     mousetracker = MouseTracker()
     mousetracker.startup()
-    mousetracker.timer = call_repeatedly(1, mousetracker.get_mouse_position)
+    mousetracker.timer = call_repeatedly(0.5, mousetracker.get_mouse_position)
 
 
 
