@@ -1,16 +1,20 @@
 import pyautogui
-import threading
 import csv
 from pynput import keyboard
 from pynput import mouse
+from threading import Event, Thread
+
 
 class MouseTracker:
+
     def __init__(self):
         self.mouse_pos_data = []
         self.num_mouse_clicks = 0
         self.num_keystrokes = 0
         self.num_scrolls = 0
         self.participant = ""
+        self.timer = None
+
 
     def startup(self):
         print("----------------------")
@@ -19,6 +23,7 @@ class MouseTracker:
         print("Hit the Esc key to stop recording")
         self.participant = input("Enter a name for your participant: ")
         print("Recording...")
+
         # Keyboard listener in a non-blocking fashion:
         keyboard_listener = keyboard.Listener(on_release=self.on_release)
         keyboard_listener.start()
@@ -30,10 +35,9 @@ class MouseTracker:
 
 
     def get_mouse_position(self):
-      threading.Timer(1, self.get_mouse_position).start()
-      position = pyautogui.position()
-      print("Current position:", position)
-      self.mouse_pos_data.append([position.x, position.y])
+        position = pyautogui.position()
+        print("Current position:", position)
+        self.mouse_pos_data.append([position.x, position.y])
 
 
     #----------------Mouse Monitoring---------------------
@@ -42,8 +46,6 @@ class MouseTracker:
         if pressed:
             print('Mouse clicked at ({0}, {1}) with {2}'.format(x, y, button))
             self.num_mouse_clicks += 1
-
-
 
 
     def on_scroll(self, x, y, dx, dy):
@@ -67,6 +69,7 @@ class MouseTracker:
         if key == keyboard.Key.esc:
             self.export_to_csv(self.mouse_pos_data)
             print("Esc key pressed. Stopped recording.")
+            self.timer()  # stop future calls
             # Stop listener
             return False
 
@@ -82,11 +85,20 @@ class MouseTracker:
         print("Total number of scrolls: ", self.num_scrolls)
 
 
+def call_repeatedly( interval, func, *args):
+    stopped = Event()
+
+    def loop():
+        while not stopped.wait(interval):  # the first call is in `interval` secs
+            func(*args)
+
+    Thread(target=loop).start()
+    return stopped.set
 
 def main():
     mousetracker = MouseTracker()
     mousetracker.startup()
-    mousetracker.get_mouse_position()
+    mousetracker.timer = call_repeatedly(1, mousetracker.get_mouse_position)
 
 
 
