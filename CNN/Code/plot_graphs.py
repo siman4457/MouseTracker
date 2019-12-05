@@ -3,7 +3,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Just a script to modify the Python plots
+# Just a simple script to prettify the Python plots
 
 # Plot training/validation graphs
 def plot_graphs(acc, val_acc, loss, val_loss):
