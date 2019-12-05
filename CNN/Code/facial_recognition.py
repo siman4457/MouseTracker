@@ -6,6 +6,10 @@ from keras import layers
 from keras import models
 from keras import optimizers
 
+# This script builds & trains the CNN: 65% Training Accuracy, 63% validation Accuracy 
+# Reference: https://medium.com/free-code-camp/facial-emotion-recognition-develop-a-c-n-n-and-break-into-kaggle-top-10-f618c024faa7
+# (While we used the load_data() function from the article, the actual CNN was a variation from the one in the book Deep Learning with Python.)
+
 # Load data from .csv file
 def load_data(dataset_path):
   data = []
