@@ -6,7 +6,11 @@ from keras.preprocessing.image import load_img
 from keras.preprocessing.image import save_img
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
-# from keras.preprocessing.image import ImageDataGenerator
+
+# This script runs the CNN predictions on the images obtained from the experiment results
+# (Images are stored in 'Images' folder on the Google Drive)
+# 5 categories are evaluated: Happy Max, Happy Average, Happy Variance, Neutral Average, Neutral Variance, Sad Max
+# Results are printed to facial_recog_data.csv (5 categories per experiment platform)
 
 # Write data to .csv file
 def write_data_to_file(data_labels, happyMax, happyAvg, happyVar, neutralAvg, neutralVar, sadMax):
